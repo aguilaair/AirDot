@@ -112,6 +112,7 @@ script:
             static_cast<int32_t>(now - id(air_quality_warmup_until_ms)) < 0;
           if (!warmup_active && id(air_quality_warmup_until_ms) != 0 &&
               id(air_quality_warmup_reported) == 0) {
+            id(air_quality_warmup_until_ms) = 0;
             id(air_quality_warmup_reported) = 1;
           }
 

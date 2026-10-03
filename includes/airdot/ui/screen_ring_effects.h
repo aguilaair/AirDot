@@ -25,30 +25,14 @@ inline Effect effect_from_name(const char *name) {
 
 // Effects only ever change the arc angles. LVGL then invalidates just the slices at the arc ends,
 // which matters on this panel: a full 480x480 redraw takes about 200 ms, and even redrawing only the
-// band under the ring (as a whole-ring opacity animation would) takes about 100 ms per frame.
-constexpr uint32_t EFFECT_MIN_FRAME_MS = 66;
+// band under the ring (as a whole-ring opacity animation would) takes about 100 ms per frame. An angle
+// step costs ~19 ms, so the animations run at ~23 fps with LVGL busy ~42% of the time.
 constexpr uint32_t PULSE_PERIOD_MS = 3000;
 constexpr uint32_t SPINNER_PERIOD_MS = 3000;
 constexpr float SPINNER_SWEEP = 90.0f;
 
-inline uint32_t &effect_last_frame_ms_() {
-  static uint32_t last = 0;
-  return last;
-}
-
-// Caps animations at about 15 fps to keep LVGL from hogging the main loop.
-inline bool effect_frame_due_() {
-  auto &last = effect_last_frame_ms_();
-  if (lv_tick_elaps(last) < EFFECT_MIN_FRAME_MS)
-    return false;
-  last = lv_tick_get();
-  return true;
-}
-
 // value is in tenths of a degree over two turns: the first fills the ring clockwise, the second wipes it out.
 inline void pulse_exec_(void *obj, int32_t value) {
-  if (!effect_frame_due_())
-    return;
   const float angle = value / 10.0f;
   if (angle < 360.0f)
     set_sweep(static_cast<lv_obj_t *>(obj), 0.0f, angle);
@@ -57,8 +41,6 @@ inline void pulse_exec_(void *obj, int32_t value) {
 }
 
 inline void spinner_exec_(void *obj, int32_t value) {
-  if (!effect_frame_due_())
-    return;
   set_sweep(static_cast<lv_obj_t *>(obj), value / 10.0f, SPINNER_SWEEP);
 }
 

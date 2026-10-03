@@ -90,6 +90,22 @@ number:
     on_value:
       - script.execute: ui_apply_screen_ring
 
+  # Draws only part of the ring, clockwise from 12 o'clock. Useful as a progress or countdown indicator.
+  - platform: template
+    id: screen_ring_progress
+    name: Screen Ring Progress
+    icon: mdi:progress-helper
+    unit_of_measurement: "%"
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 100
+    restore_value: true
+    optimistic: true
+    mode: slider
+    on_value:
+      - script.execute: ui_apply_screen_ring
+
 script:
   - id: ui_apply_screen_ring
     mode: restart
@@ -113,6 +129,13 @@ script:
             else
               style.color = AirDot::air_quality_status_color(level);
           }
+
+          // Pulse and Spinner drive the ring angles themselves, so progress only applies otherwise.
+          const bool animated =
+            effect == AirDot::screen_ring::Effect::PULSE || effect == AirDot::screen_ring::Effect::SPINNER;
+          const float progress = id(screen_ring_progress).state;
+          if (!animated && !std::isnan(progress))
+            style.sweep = 360.0f * std::clamp(progress, 0.0f, 100.0f) / 100.0f;
 
           AirDot::screen_ring::stop_effects(ring);
           AirDot::screen_ring::apply(ring, style);

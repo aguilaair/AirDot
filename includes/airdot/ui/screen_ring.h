@@ -48,21 +48,28 @@ inline void set_sweep(lv_obj_t *ring, float start_angle, float sweep) {
   lv_arc_set_angles(ring, start_angle, start_angle + sweep);
 }
 
+// Every style change invalidates the whole 480x480 arc object, which takes ~200 ms to redraw, so only
+// properties that actually changed are written. Angle changes invalidate just the affected slice.
 inline void apply(lv_obj_t *ring, const RingStyle &style) {
   if (ring == nullptr)
     return;
 
   if (!style.visible || style.sweep <= 0.0f) {
-    lv_obj_add_flag(ring, LV_OBJ_FLAG_HIDDEN);
+    if (!lv_obj_has_flag(ring, LV_OBJ_FLAG_HIDDEN))
+      lv_obj_add_flag(ring, LV_OBJ_FLAG_HIDDEN);
     return;
   }
 
-  lv_obj_set_style_arc_color(ring, style.color, LV_PART_INDICATOR);
-  lv_obj_set_style_arc_opa(ring, style.opa, LV_PART_INDICATOR);
-  lv_obj_set_style_arc_width(ring, style.width, LV_PART_INDICATOR);
+  if (!lv_color_eq(lv_obj_get_style_arc_color(ring, LV_PART_INDICATOR), style.color))
+    lv_obj_set_style_arc_color(ring, style.color, LV_PART_INDICATOR);
+  if (lv_obj_get_style_arc_opa(ring, LV_PART_INDICATOR) != style.opa)
+    lv_obj_set_style_arc_opa(ring, style.opa, LV_PART_INDICATOR);
+  if (lv_obj_get_style_arc_width(ring, LV_PART_INDICATOR) != style.width)
+    lv_obj_set_style_arc_width(ring, style.width, LV_PART_INDICATOR);
   set_sweep(ring, style.start_angle, style.sweep);
   lv_obj_remove_flag(ring, LV_OBJ_FLAG_CLICKABLE);
-  lv_obj_remove_flag(ring, LV_OBJ_FLAG_HIDDEN);
+  if (lv_obj_has_flag(ring, LV_OBJ_FLAG_HIDDEN))
+    lv_obj_remove_flag(ring, LV_OBJ_FLAG_HIDDEN);
   lv_obj_move_foreground(ring);
 }
 

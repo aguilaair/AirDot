@@ -192,6 +192,7 @@ factory_reset:
 connection:
   indoor: Indoor
   outdoor: Outdoor
+  offline: Offline
 
 weather:
   clear: Clear
@@ -283,3 +284,7 @@ onboarding:
       You can now track
       your air quality.
     countdown: Overview opens in {seconds}…
+
+trend:
+  last_hour: "{delta} in the last hour"
+  last_minutes: "{delta} in the last {minutes} min"

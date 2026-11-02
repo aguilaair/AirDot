@@ -178,7 +178,6 @@ AirDot publishes these entities to Home Assistant:
 - Worst Pollutant: the measurement that sets the current status, or None when everything is Good
 - Ventilation Recommended, as an on/off sensor
 - Screen Ring, as an RGB light
-- Screen Ring Thickness, as a number from 1 to 40 px
 - Screen Ring Progress, as a number from 0 to 100%
 
 The default publication interval is 10 seconds. In setup, this can be changed to 5, 10, or 30 seconds.
@@ -187,7 +186,7 @@ Display Brightness uses a number field. When automatic brightness is enabled, Ai
 
 Air Quality Status, Air Quality Level, Worst Pollutant, and Ventilation Recommended use the same assessment as the display, including the selected guideline profile and custom thresholds. Ventilation Recommended turns on when the status is Poor or worse, matching the on-device "Ventilate the room" guidance.
 
-Screen Ring draws a thin colored ring around the edge of the display, on top of every page. The light color sets the ring color, the light brightness sets its opacity, and turning the light off hides the ring. Screen Ring Thickness sets the ring width in pixels. Screen Ring Progress, from 0 to 100%, draws only that part of the ring, clockwise from the top, so the ring can show progress or a countdown. At 100% the full ring is shown. The Screen Ring light also has an *Air Quality* effect that colors the ring by the current air-quality status (green, yellow, orange, red, or magenta for Critical) and keeps following it. The ring is off by default and its state is restored after a reboot, which makes it useful as a subtle status indicator driven by Home Assistant automations.
+Screen Ring draws a colored segment in the gap at the bottom of the display's ring, on top of every page. On the home screen it matches the pollutant arcs; on other screens it is a hairline. The light color sets the segment color, the light brightness sets its opacity, and turning the light off hides it. Screen Ring Progress, from 0 to 100%, fills only that part of the segment, from left to right, so it can show progress or a countdown. At 100% the full segment is shown. The Screen Ring light also has an *Air Quality* effect that colors the ring by the current air-quality status (green, yellow, orange, red, or magenta for Critical) and keeps following it. The segment is off by default and its state is restored after a reboot, which makes it useful as a subtle status indicator driven by Home Assistant automations.
 
 AirDot also exposes ESPHome API actions for display notifications:
 

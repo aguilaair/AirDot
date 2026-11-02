@@ -23,7 +23,7 @@ font:
   - file: "gfonts://Roboto"
     id: ui_font_radar_tag
     size: 18
-    glyphs: " -./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz●"
+    glyphs: " -./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~●"
   - file: "gfonts://Roboto"
     id: ui_font_modal_title
     size: 31
@@ -45,3 +45,24 @@ font:
     id: ui_font_summary_unit
     size: 26
     glyphs: "CFHPaghin%°"
+  - file: "gfonts://Roboto"
+    id: ui_font_ring_label
+    size: 20
+    glyphs: " .CMNOPVx₀₁₂₅"
+    bpp: 4
+  - file:
+      type: gfonts
+      family: Roboto
+      weight: light
+    id: ui_font_calm_time
+    size: 112
+    glyphs: "-0123456789:"
+    bpp: 4
+  - file:
+      type: gfonts
+      family: Roboto
+      weight: 500
+    id: ui_font_history_value
+    size: 84
+    glyphs: "-.0123456789"
+    bpp: 4
